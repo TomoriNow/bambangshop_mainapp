@@ -1,6 +1,7 @@
 use dashmap::DashMap;
 use lazy_static::lazy_static;
-use crate::model::subscriber::{self, Subscriber};
+use reqwest::Url;
+use crate::model::subscriber::Subscriber;
 
 lazy_static! {
     static ref SUBSCRIBERS: DashMap<usize, DashMap<String, Subscriber>> = DashMap::new();
@@ -26,4 +27,17 @@ impl SubscriberRepository {
         
         return SUBSCRIBERS.get(product_type).unwrap().iter().map(|f| f.value().clone()).collect();
     }
+    
+    pub fn delete(product_type: &str, url: &str) {
+        if SUBSCRIBERS.get(product_type).is_none() {
+            SUBSCRIBERS.insert(String::from(product_type), DashMap::new());
+        }
+        
+        let result = SUBSCRIBERS.get(product_type).unwrap().remove(url);
+        if !result.is_none() {
+            return Some(result.unwrap().1);
+        }
+        return None;
+    }
+    
 }

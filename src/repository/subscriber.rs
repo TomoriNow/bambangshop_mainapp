@@ -3,7 +3,7 @@ use lazy_static::lazy_static;
 use crate::model::subscriber::Subscriber;
 
 lazy_static! {
-    static ref SUBSCRIBERS: DashMap<usize, DashMap<String, Subscriber>> = DashMap::new();
+    static ref SUBSCRIBERS: DashMap<String, DashMap<String, Subscriber>> = DashMap::new();
 }
 
 pub struct SubscriberRepository;
@@ -27,7 +27,7 @@ impl SubscriberRepository {
         return SUBSCRIBERS.get(product_type).unwrap().iter().map(|f| f.value().clone()).collect();
     }
     
-    pub fn delete(product_type: &str, url: &str) {
+    pub fn delete(product_type: &str, url: &str) -> Option<Subscriber> {
         if SUBSCRIBERS.get(product_type).is_none() {
             SUBSCRIBERS.insert(String::from(product_type), DashMap::new());
         }

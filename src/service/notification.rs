@@ -16,6 +16,4 @@ impl NotificationService {
         let subscriber_result: Subscriber = SubscriberRepository::add(product_type_str, subscriber);
         return Ok(subscriber_result);
     }
-    
-    
 }
